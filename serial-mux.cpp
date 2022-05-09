@@ -401,8 +401,6 @@ void shutdownVPorts(void)
 // the appropriate virtual port.
 void readThread(void)
 {
-    std::cout << "START: readThread()" << std::endl; // @DEBUG
-
     while (!terminateProcess)
     {
         int n;
@@ -413,10 +411,9 @@ void readThread(void)
         // First byte is the channel ID
         if ((n = read(phys_tty, &cid, 1)) != 1)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1)); // @DEBUG
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
         }
-        std::cout << "readThread cid=" << cid << std::endl; // @DEBUG
 
         // The next 2 bytes are the number of bytes to follow.
         // MSB first.
@@ -424,7 +421,6 @@ void readThread(void)
         nbytes = (tmp & 0xFF) << 8;
         n = read(phys_tty, &tmp, 1);
         nbytes += (tmp & 0xFF);
-        std::cout << "readThread nbytes=" << std::to_string(nbytes) << std::endl; // @DEBUG
 
         struct ptyChan *chan = &sVirtualPorts[cid];
 
@@ -432,13 +428,10 @@ void readThread(void)
         while (!terminateProcess && nbytes)
         {
             n = read(phys_tty, &tmp, 1);
-            std::cout << "readThread read " << std::to_string(n) << " bytes" << std::endl; // @DEBUG
             write(chan->pty, &tmp, 1);
-            std::cout << "readThread wrote " << std::to_string(n) << " bytes" << std::endl; // @DEBUG
             nbytes--;
         }
     } // end while()
-    std::cout << "END: readThread()" << std::endl; // @DEBUG
 }
 
 // ****************************************************************************
@@ -446,8 +439,6 @@ void readThread(void)
 // Thread that reads from the virtual ports and writes to the physical port.
 void writeThread(void)
 {
-    std::cout << "START: writeThread()" << std::endl; // @DEBUG
-
     while (!terminateProcess)
     {
         int tmp;
@@ -462,7 +453,7 @@ void writeThread(void)
             tmp = read(chan.pty, buf, cMaxDataSize);
             if (tmp < 1)
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1)); // @DEBUG
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
                 // No data read - check next pty
                 continue;
             }
@@ -489,7 +480,6 @@ void writeThread(void)
             }
         } // end for(cid, chan)
     } // end while()
-    std::cout << "END: writeThread()" << std::endl; // @DEBUG
 }
 
 // ****************************************************************************

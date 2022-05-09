@@ -1,4 +1,4 @@
-# SerialMultiplexer
+# Serial Multiplexer
 Utility to create multiple virtual serial ports that all go over a single physical serial port.  
 
 Users of the virtual ports don't have to know anything about the underlying

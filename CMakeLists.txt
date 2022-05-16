@@ -15,6 +15,8 @@ configure_file(serial-mux.h.in ${PROJECT_SOURCE_DIR}/serial-mux.h)
 
 add_executable(serial-mux serial-mux.cpp serial-mux.h)
 
+target_link_libraries(serial-mux PUBLIC pthread)
+
 add_subdirectory(test)
 
 install(TARGETS serial-mux DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}" )

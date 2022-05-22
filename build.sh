@@ -1,5 +1,5 @@
 OLDPWD=${PWD}
 cd build
 cmake ..
-make
+make -j 8
 cd ${OLDPWD}
